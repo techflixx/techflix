@@ -1,0 +1,107 @@
+/* Reset some default styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #121212;
+  color: #ffffff;
+  line-height: 1.6;
+}
+
+/* Header Styles */
+header {
+  background-color: #1f1f1f;
+  padding: 2rem;
+  text-align: center;
+}
+
+header h1 {
+  font-size: 2.5rem;
+  color: #00d1b2;
+}
+
+header p {
+  font-size: 1.2rem;
+  margin-top: 0.5rem;
+}
+
+/* Intro paragraph */
+.intro {
+  margin-top: 1.5rem;
+  font-size: 1rem;
+  color: #ccc;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.8;
+}
+
+/* Search Bar Styles */
+.search-container {
+  text-align: center;
+  margin: 2rem 0;
+}
+
+#searchInput {
+  padding: 0.7rem 1rem;
+  width: 60%;
+  max-width: 400px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 25px;
+  outline: none;
+  background-color: #2a2a2a;
+  color: #fff;
+}
+
+/* Main Movie Section */
+main {
+  padding: 2rem;
+}
+
+.movies {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+.movie-card {
+  background-color: #242424;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  transition: transform 0.2s ease-in-out;
+}
+
+.movie-card:hover {
+  transform: scale(1.05);
+}
+
+.movie-card img {
+  width: 100%;
+  height: auto;
+}
+
+.movie-card h2 {
+  font-size: 1.4rem;
+  padding: 1rem;
+  color: #00d1b2;
+}
+
+.movie-card p {
+  padding: 0 1rem 1rem;
+  font-size: 1rem;
+  color: #ccc;
+}
+
+/* Footer Styles */
+footer {
+  text-align: center;
+  padding: 1rem;
+  background-color: #1f1f1f;
+  margin-top: 2rem;
+}

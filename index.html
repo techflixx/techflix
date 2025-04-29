@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TechFlix - Tech Movie Recommendations</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>🎬 TechFlix</h1>
+    <p>Your gateway to the best tech-related movies</p>
+    <p class="intro">
+      Welcome to TechFlix — your curated hub for tech-inspired movies! Whether you're diving into algorithms or debugging code, TechFlix offers a fun and educational escape through cinema. This platform features films that explore real-world tech breakthroughs, iconic innovators, artificial intelligence, cybersecurity, and more. Perfect for computer science students looking to relax without straying too far from their passion, each movie is chosen to entertain <em>and</em> inspire.
+    </p>
+  </header>
+
+  <main>
+    <div class="search-container">
+      <input type="text" id="searchInput" placeholder="Search movies..." />
+    </div>
+
+    <section class="movies" id="movieList"></section>
+  </main>
+
+  <footer>
+    <p>© 2025 TechFlix. Made for tech movie lovers.</p>
+  </footer>
+
+  <script>
+    const movies = [
+      {
+        title: "The Social Network",
+        description: "A compelling drama about the rise of Facebook.",
+        image: "https://via.placeholder.com/300x400?text=The+Social+Network"
+      },
+      {
+        title: "The Imitation Game",
+        description: "The story of Alan Turing and the breaking of the Enigma code.",
+        image: "https://via.placeholder.com/300x400?text=The+Imitation+Game"
+      },
+      {
+        title: "Jobs",
+        description: "A look at the life of Apple co-founder Steve Jobs.",
+        image: "https://via.placeholder.com/300x400?text=Jobs"
+      },
+      {
+        title: "Ex Machina",
+        description: "A mind-bending story about AI and ethics.",
+        image: "https://via.placeholder.com/300x400?text=Ex+Machina"
+      },
+      {
+        title: "Hackers",
+        description: "A cult classic about teenage hackers.",
+        image: "https://via.placeholder.com/300x400?text=Hackers"
+      },
+      {
+        title: "The Matrix",
+        description: "A hacker discovers a shocking truth about reality.",
+        image: "https://via.placeholder.com/300x400?text=The+Matrix"
+      }
+    ];
+
+    const movieList = document.getElementById("movieList");
+
+    function renderMovies(list) {
+      movieList.innerHTML = "";
+      list.forEach(movie => {
+        const card = document.createElement("div");
+        card.className = "movie-card";
+        card.innerHTML = `
+          <img src="${movie.image}" alt="${movie.title}">
+          <h2>${movie.title}</h2>
+          <p>${movie.description}</p>
+        `;
+        movieList.appendChild(card);
+      });
+    }
+
+    // Initial render
+    renderMovies(movies);
+
+    // Search filter
+    const searchInput = document.getElementById('searchInput');
+    searchInput.addEventListener('input', () => {
+      const term = searchInput.value.toLowerCase();
+      const filtered = movies.filter(movie =>
+        movie.title.toLowerCase().includes(term)
+      );
+      renderMovies(filtered);
+    });
+  </script>
+</body>
+</html>
