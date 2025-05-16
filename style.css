@@ -105,10 +105,11 @@ main {
   background-color: #242424;
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.03);
+  opacity: 0.9;
   transition: transform 0.2s ease-in-out;
-  padding: 1rem; /* Ensure there is some padding inside the card */
-  height: auto; /* Let the card grow based on content size */
+  padding: 0.9rem;  
+  height: auto; 
 }
 
 
@@ -148,4 +149,60 @@ footer {
   padding: 1rem;
   background-color: #1f1f1f;
   margin-top: 2rem;
+}
+
+.movie-details-container {
+  padding: 2rem;
+  max-width: 800px;
+  margin: auto;
+}
+
+.movie-details-container .movie-card {
+  background-color: #242424;
+  padding: 1.5rem;
+  border-radius: 12px;
+}
+
+.providers {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.provider img {
+  border-radius: 8px;
+  background-color: white;
+  padding: 5px;
+  box-shadow: 0 2px 5px rgba(255, 255, 255, 0.1);
+  width: 45px;
+  height: 45px;
+}
+
+#countrySelect {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border-radius: 5px;
+  background-color: #2a2a2a;
+  color: #fff;
+  border: none;
+}
+
+.details-button {
+  display: block;
+  margin: 0.5rem auto 0;
+  padding: 0.5rem 1rem;
+  background-color: #00abd1;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.details-button:hover {
+  background-color: #0086a9;
 }
