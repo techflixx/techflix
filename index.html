@@ -57,48 +57,90 @@
     const BASE_URL = "https://api.themoviedb.org/3";
     const movieList = document.getElementById("movieList");
     const topicSelect = document.getElementById("topicSelect");
+  
+    // Curated fallback movie titles per topic
+    const fallbackMovies = {
+  "algorithms": ["The Imitation Game", "Travelling Salesman"],
+  "artificial intelligence": ["Ex Machina", "Her", "A.I. Artificial Intelligence", "The Machine"],
+  "blockchain": ["Cryptopia: Bitcoin, Blockchains and the Future of the Internet", "Banking on Bitcoin", "Trust Machine"],
+  "coding": ["The Social Network", "The Code", "Codegirl", "Indie Game: The Movie"],
+  "computers": ["The Matrix", "TRON", "Jobs", "Steve Jobs"],
+  "cryptography": ["The Imitation Game", "Sneakers", "Citizenfour"],
+  "cyber": ["Hackers", "Swordfish", "Cyberbully", "The Fifth Estate"],
+  "cybersecurity": ["Blackhat", "Snowden", "Zero Days"],
+  "hacker": ["The Matrix", "Hackers", "WarGames", "Who Am I"],
+  "internet": ["The Social Network", "The Great Hack", "The Internet's Own Boy"],
+  "machine learning": ["Ex Machina", "AlphaGo", "iHuman"],
+  "programming": ["The Social Network", "Pirates of Silicon Valley", "Jobs", "Code: Debugging the Gender Gap"],
+  "robotics": ["I, Robot", "Chappie", "Big Hero 6", "Real Steel"],
+  "silicon valley": ["Pirates of Silicon Valley", "The Social Network", "Something Ventured", "StartUp.com"],
+  "startups": ["The Startup Kids", "StartUp.com", "Something Ventured", "The Inventor: Out for Blood in Silicon Valley"],
+  "technology": ["Transcendence", "Ready Player One", "Upgrade", "The Circle"],
+  "virtual reality": ["Ready Player One", "TRON: Legacy", "The Matrix", "The Lawnmower Man"]
+};
 
+  
     async function fetchMovies(query) {
       try {
         const url = `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}&language=en-US`;
         const response = await fetch(url);
         const data = await response.json();
-        renderMovies(data.results);
+        return data.results;
       } catch (error) {
-        console.error("Error fetching movies:", error);
+        console.error("Error during fetch:", error);
+        return [];
       }
     }
-
+  
     function renderMovies(movies) {
       movieList.innerHTML = "";
-      if (movies.length === 0) {
+  
+      if (!movies || movies.length === 0) {
         movieList.innerHTML = "<p>No movies found for this topic.</p>";
         return;
       }
-
+  
       movies.forEach(movie => {
         if (!movie.poster_path) return;
-
-        const overview = movie.overview ? movie.overview.slice(0, 300) + "..." : "No description available.";
-
+  
         const card = document.createElement("div");
         card.className = "movie-card";
         card.innerHTML = `
-          <img src="https://image.tmdb.org/t/p/w300${movie.poster_path}" alt="${movie.title}">
-          <h2>${movie.title}</h2>
-          <p>${movie.overview.slice(0, 300)}...</p> <!-- Display truncated description -->
-        `;
+  <img src="https://image.tmdb.org/t/p/w300${movie.poster_path}" alt="${movie.title}">
+  <h2>${movie.title}</h2>
+  <p>${movie.overview ? movie.overview.slice(0, 300) + "..." : "No description available."}</p>
+  <button class="details-button" onclick="window.open('movie.html?id=${movie.id}', '_blank')">More Details</button>
+`;
+
+  
         movieList.appendChild(card);
       });
     }
-
-    // Load movies for the default selected topic
-    fetchMovies(topicSelect.value);
-
-    // Update when user changes topic
+  
+    async function loadMoviesForTopic(topic) {
+      const movies = await fetchMovies(topic);
+  
+      // If search returned few or no results, use curated fallback
+      if (movies.length < 3 && fallbackMovies[topic]) {
+        let allFallbackResults = [];
+        for (const title of fallbackMovies[topic]) {
+          const results = await fetchMovies(title);
+          if (results.length) allFallbackResults.push(results[0]); // Pick the top match
+        }
+        renderMovies(allFallbackResults);
+      } else {
+        renderMovies(movies);
+      }
+    }
+  
+    // Initial load
+    loadMoviesForTopic(topicSelect.value);
+  
+    // Update on topic change
     topicSelect.addEventListener("change", () => {
-      fetchMovies(topicSelect.value);
+      loadMoviesForTopic(topicSelect.value);
     });
   </script>
+  
 </body>
 </html>
