@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Movie Details</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main id="movieDetails" class="movie-details-container"></main>
+
+  <script>
+    const API_KEY = "e7f86a796a474242347090f87d6e89fe";
+    const BASE_URL = "https://api.themoviedb.org/3";
+    const movieId = new URLSearchParams(window.location.search).get("id");
+  
+    const movieDetailsContainer = document.getElementById("movieDetails");
+  
+    async function fetchMovieDetails(id) {
+      try {
+        const response = await fetch(`${BASE_URL}/movie/${id}?api_key=${API_KEY}&language=en-US`);
+        const movie = await response.json();
+        renderMovieDetails(movie);
+        fetchWatchProviders(id, "US"); // default to US
+      } catch (error) {
+        console.error("Error fetching movie details:", error);
+        movieDetailsContainer.textContent = "Failed to load movie details.";
+      }
+    }
+  
+    function renderMovieDetails(movie) {
+      movieDetailsContainer.innerHTML = `
+        <div class="movie-card">
+          <img src="https://image.tmdb.org/t/p/w300${movie.poster_path}" alt="${movie.title}">
+          <h2>${movie.title}</h2>
+          <p><strong>Release Date:</strong> ${movie.release_date}</p>
+          <p><strong>Rating:</strong> ${movie.vote_average}/10</p>
+          <p>${movie.overview}</p>
+          <label for="countrySelect"><strong>Select Country for Streaming Info:</strong></label>
+          <select id="countrySelect">
+            <option value="US">🇺🇸 United States</option>
+            <option value="GB">🇬🇧 United Kingdom</option>
+            <option value="CA">🇨🇦 Canada</option>
+            <option value="IN">🇮🇳 India</option>
+            <option value="DE">🇩🇪 Germany</option>
+            <option value="FR">🇫🇷 France</option>
+            <option value="AU">🇦🇺 Australia</option>
+          </select>
+          <div id="watchProviders"></div>
+          <br>
+          <a href="index.html" style="color: #00abd1;">← Back to Home</a>
+        </div>
+      `;
+  
+      const countrySelect = document.getElementById("countrySelect");
+      countrySelect.addEventListener("change", () => {
+        const selectedCountry = countrySelect.value;
+        fetchWatchProviders(movieId, selectedCountry);
+      });
+    }
+  
+    async function fetchWatchProviders(id, countryCode) {
+      try {
+        const response = await fetch(`${BASE_URL}/movie/${id}/watch/providers?api_key=${API_KEY}`);
+        const data = await response.json();
+  
+        const providers = data.results?.[countryCode]?.flatrate || [];
+        const watchContainer = document.getElementById("watchProviders");
+  
+        if (providers.length === 0) {
+          watchContainer.innerHTML = "<p>Not available for streaming in this country.</p>";
+        } else {
+          const logos = providers.map(p => `
+            <div class="provider">
+              <img src="https://image.tmdb.org/t/p/w45${p.logo_path}" alt="${p.provider_name}" title="${p.provider_name}">
+            </div>
+          `).join('');
+          watchContainer.innerHTML = `<div class="providers">${logos}</div>`;
+        }
+      } catch (error) {
+        console.error("Error fetching watch providers:", error);
+      }
+    }
+  
+    if (movieId) {
+      fetchMovieDetails(movieId);
+    } else {
+      movieDetailsContainer.textContent = "No movie selected.";
+    }
+  </script>
+  
+</body>
+</html>
